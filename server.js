@@ -18,6 +18,23 @@ connection.connect(function (err) {
     allItems();
     // connection.end();
 });
+function allItems() {
+    let allItem = 'SELECT * from inventory'
+    connection.query(allItem, function (err, data) {
+        if (err) throw err;
+        data.forEach(inventory => {
+            console.log(`
+                    Product Information
+                    ===============================
+                    ID: ${inventory.item_id}
+                    Product Name: ${inventory.product_name}
+                    Price: ${inventory.price}
+                    Quantity: ${inventory.stock_quantity}
+                    `)
+        });
+        launch();
+    })
+}
 function launch() {
     inquirer.prompt([
         {
@@ -46,16 +63,16 @@ function launch() {
                 let newAmt = results.stock_quantity - desiredQuantity;
                 // console.log(newAmt);
                 let total = desiredQuantity * results.price;
-                let grandT = total+ 5.99;
+                let grandT = parseFloat(total + 5.99);
                 console.log(`
                 Price: $${total}
                 Shipping: $5.99
-                Total: ${grandT}
+                Total: $ ${grandT}
                 `)
                 let postQuery = `Update inventory SET ? Where ?`
                 connection.query(postQuery, [{ stock_quantity: newAmt }, { item_id: desiredItem }], function (err, data) {
                     if (err) throw err;
-                    console.log('New quantity set at ' + data.stock_quantity)
+                    // console.log('New quantity set at ' + result.stock_quantity)
 
                     connection.end();
                 })
@@ -67,21 +84,3 @@ function launch() {
         })
     })
 };
-
-function allItems() {
-    let allItem = 'SELECT * from inventory'
-    connection.query(allItem, function (err, data) {
-        if (err) throw err;
-        data.forEach(inventory => {
-            console.log(`
-            Product Information
-            ===============================
-            ID: ${inventory.item_id}
-            Product Name: ${inventory.product_name}
-            Price: ${inventory.price}
-            Quantity: ${inventory.stock_quantity}
-            `)
-        });
-        launch();
-    })
-}
