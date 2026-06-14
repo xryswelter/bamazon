@@ -4,7 +4,7 @@
   "description": "Node and MySQL project example",
   "main": "bamazon.js",
   "dependencies": {
-    "inquirer": "^6.0.0",
+    "inquirer": "^14.0.0",
     "mysql": "^2.16.0"
   },
   "devDependencies": {},
